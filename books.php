@@ -38,6 +38,8 @@ include "navbar.php";
         padding-left:1000px;
     }
 
+
+    /* ---------------------------sidenav-style----------------------------------------- */
     body {
   font-family: "Lato", sans-serif;
   transition: background-color .5s;
@@ -87,16 +89,25 @@ include "navbar.php";
   .sidenav {padding-top: 15px;}
   .sidenav a {font-size: 18px;}
 
+.b:hover
+{
+ width:200px;
+ height: 50px;
+ color:white;
+ background-color:red;
+}
 
 </style>
-<body style="background-color:LightSkyBlue;">
+<body style="background-color:aqua;">
+
 
 
 <div id="mySidenav" class="sidenav">
   <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-  <a href="books.php">Books</a> 
+  <a href="add.php">Add Books</a> 
   <a href="request.php">Book Request</a>
   <a href="issue_info.php">Issue Information</a>
+  <div><a href="expired.php">Expired List</a></div>
 </div>
 
 <div id="main">
@@ -124,26 +135,19 @@ function closeNav() {
 <div class="s-bar">
 
 <form class="s-form" action="" method="post" name="form1" >
-        <input type="text" name="search" placeholder="search books" >
+        <input type="text" name="search" placeholder="search books" required="">
         <button class="btn-s" name="submit">
         <span class="fa fa-search"></span>&nbsp;Search
         </button>
+</form>
 
-</div>
-
-<!-- --------------------------------book-request----------------------------------- -->
-
-<div class="s-bar">
-
-&nbsp;<form class="s-form" action="" method="post" name="form1" >
-        <input type="text" name="bid" placeholder="Enter Book Id" >
+<form class="s-form" action="" method="post" name="form2" >
+        <input type="text" name="bid" placeholder="Enter Book Id" required="">
         <button class="btn-s" name="submit1">
-        &nbsp;Request
+        &nbsp;Delete
         </button>
-
+</form>
 </div>
-
-
 
     <div id ='h'>
     <h2 style="font-size:30px; text-align:left;padding-left:70px;">LIST OF BOOKS</h2>
@@ -161,7 +165,7 @@ function closeNav() {
 
         else{
             echo "<table>";
-            echo "<tr style='background-color: green;'>";
+            echo "<tr style='background-color: LightSkyBlue;'>";
             //Table Header
             echo "<th>"; echo "ID"; echo "</th>";
             echo "<th>"; echo "Book-Name"; echo "</th>";
@@ -191,12 +195,12 @@ function closeNav() {
 
         }
     }
-//    -----------------------if button is not pressed-------------
+
     else{
         $res=mysqli_query($db,"SELECT * FROM `books`;");
 
         echo "<table>";
-        echo "<tr style='background-color: royalblue;'>";
+        echo "<tr style='background-color: LightSkyBlue;'>";
         //Table Header
         echo "<th>"; echo "ID"; echo "</th>";
         echo "<th>"; echo "Book-Name"; echo "</th>";
@@ -225,29 +229,29 @@ function closeNav() {
         echo "</table>";
    
     }
-
-
+      
     if(isset($_POST['submit1']))
     {
-        if(isset($_SESSION['login_user']))
-        {
-            mysqli_query($db,"INSERT INTO issue_book Values('$_SESSION[login_user]','$_POST[bid]','','','');");
-            ?>
-            <script>
-            window.location="request.php"
-            </script>
-            <?php
-        }
-        else
-        {
-            ?>
-            <script>
-            alert("You must login to Request a book.");
-            </script>
-            <?php
-        }
+      if(isset($_SESSION['login_user']))
+      {
+      mysqli_query($db,"DELETE FROM books where bid = '$_POST[bid]';");
+      ?>
+      <script>
+      alert("Delete Successful.");
+      </script>
+      <?php
+      }
+      else
+     {
+      ?>
+      <script>
+      alert("Please Login First.");
+      </script>
+      <?php
+     }
     }
-?>
     
+    ?>
+    </div>
 </body>
 </html>
